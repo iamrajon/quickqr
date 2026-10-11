@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Generate high-resolution QR codes instantly in one click with customizable colors and formats. Built with Django 6.">
+  <title>QuickQR — Instant QR Code Generator</title>
+  
+  <!-- Modern Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{% static 'generator/css/style.css' %}">
+</head>
+<body>
+  <div class="site-wrapper">
+    <!-- Header -->
+    <header class="site-header">
+      <div class="header-container">
+        <a href="{% url 'generator:index' %}" class="brand" id="brand-link">
+          <div class="brand-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </div>
+          <span class="brand-title">QuickQR</span>
+        </a>
+        <div class="badge">
+          <span class="badge-dot"></span>
+          <span>Django 6.1 • Live</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <div class="hero-heading">
+        <h1>Generate QR Codes <span class="gradient-text">In One Click</span></h1>
+        <p class="hero-subtitle">Paste any link, text, or profile URL to instantly generate crisp, scannable QR codes ready for download or sharing.</p>
+      </div>
+
+      <div class="app-grid">
+        <!-- Generator Form Card -->
+        <section class="glass-card">
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+            Enter Destination
+          </h2>
+
+          <form method="post" action="{% url 'generator:index' %}" id="qrForm" novalidate>
+            {% csrf_token %}
+            
+            <div class="form-group">
+              <label for="id_content" class="input-label">URL or Content</label>
+              <div class="input-action-wrapper">
+                {{ form.content }}
+                <div class="input-btns">
+                  <button type="button" class="mini-action-btn" id="pasteBtn" title="Paste from clipboard">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                    </svg>
+                    Paste
+                  </button>
+                  <button type="button" class="mini-action-btn" id="clearBtn" title="Clear input">✕</button>
+                </div>
+              </div>
+              {% if form.content.errors %}
+                <span class="error-msg">{{ form.content.errors.0 }}</span>
+              {% endif %}
+
+              <!-- Quick Presets -->
+              <div class="preset-pills-row">
+                <span class="pill-tag" data-url="https://github.com">GitHub</span>
+                <span class="pill-tag" data-url="https://youtube.com">YouTube</span>
+                <span class="pill-tag" data-url="https://wikipedia.org">Wikipedia</span>
+                <span class="pill-tag" data-url="https://google.com">Google</span>
+              </div>
+            </div>
+
+            <!-- Customization Settings -->
+            <button type="button" class="settings-toggle" id="settingsToggle">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+              <span>Customize Colors & Quality</span>
+              <span class="toggle-arrow">▼</span>
+            </button>
+
+            <div class="settings-panel hidden" id="settingsPanel">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="id_fill_color" class="input-label">QR Code Color</label>
+                <div class="color-picker-row">
+                  {{ form.fill_color }}
+                  <div class="palette-chips">
+                    <span class="color-chip" style="background:#0f172a" data-color="#0f172a" title="Dark Slate"></span>
+                    <span class="color-chip" style="background:#4f46e5" data-color="#4f46e5" title="Indigo"></span>
+                    <span class="color-chip" style="background:#059669" data-color="#059669" title="Emerald"></span>
+                    <span class="color-chip" style="background:#dc2626" data-color="#dc2626" title="Crimson"></span>
+                    <span class="color-chip" style="background:#7c3aed" data-color="#7c3aed" title="Purple"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="id_back_color" class="input-label">Background Color</label>
+                <div class="color-picker-row">
+                  {{ form.back_color }}
+                  <span style="font-size: 0.8rem; color: var(--text-dim);">Background hex</span>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="id_box_size" class="input-label">Resolution</label>
+                {{ form.box_size }}
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label for="id_error_correction" class="input-label">Error Correction</label>
+                {{ form.error_correction }}
+              </div>
+            </div>
+
+            <button type="submit" class="btn-primary" id="generateBtn">
+              <span class="spinner" id="btnSpinner"></span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+              </svg>
+              <span id="btnText">Generate QR Code</span>
+            </button>
+          </form>
+
+          <!-- History Section -->
+          <div class="history-section" id="historySection" style="display: none;">
+            <div class="history-header">
+              <span class="history-title">Recent Codes</span>
+              <button type="button" class="clear-history-btn" id="clearHistoryBtn">Clear history</button>
+            </div>
+            <div class="history-list" id="historyList"></div>
+          </div>
+        </section>
+
+        <!-- Preview Card -->
+        <section class="glass-card preview-card">
+          <h2 class="card-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            Live Preview
+          </h2>
+
+          <div class="qr-frame" id="qrFrame">
+            {% if qr_data_uri %}
+              <img src="{{ qr_data_uri }}" alt="Generated QR Code" class="qr-image" id="qrImage" data-initial-uri="{{ qr_data_uri }}">
+              <div class="qr-placeholder" id="qrPlaceholder" style="display: none;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span>Enter link to preview</span>
+              </div>
+            {% else %}
+              <img src="" alt="Generated QR Code" class="qr-image" id="qrImage" style="display: none;">
+              <div class="qr-placeholder" id="qrPlaceholder">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span>Paste link above & click generate</span>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="qr-details" id="qrDetails" style="{% if not generated_content %}display: none;{% endif %}">
+            <a href="{{ generated_content|default:'#' }}" target="_blank" rel="noopener noreferrer" class="qr-url-badge" id="qrUrlBadge">
+              {{ generated_content }}
+            </a>
+          </div>
+
+          <div class="action-buttons-row" id="actionButtons" style="{% if not qr_data_uri %}display: none;{% endif %}">
+            <button type="button" class="btn-secondary" id="downloadPngBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              PNG Image
+            </button>
+            <button type="button" class="btn-secondary" id="downloadSvgBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              SVG Vector
+            </button>
+            <button type="button" class="btn-secondary full-width" id="copyImageBtn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              Copy Image to Clipboard
+            </button>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <p>QuickQR • Powered by <strong>Django 6</strong> • Press <kbd class="footer-kbd">Enter</kbd> to generate instantly</p>
+    </footer>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="{% static 'generator/js/app.js' %}"></script>
+</body>
+</html>
